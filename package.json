@@ -3,7 +3,7 @@
   "displayName": "Objdump Lens - Syntax highlight/ASM folding",
   "description": "Syntax highlighting, C/C++ vs asm separation, per-source-line asm folding and Compiler Explorer opcode tooltips for objdump -S / .lss listings.",
   "version": "0.3.0",
-  "publisher": "local",
+  "publisher": "thiagoton",
   "icon": "images/icon.png",
   "galleryBanner": {
     "color": "#0d1117",
