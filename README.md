@@ -1,4 +1,4 @@
-# Disassembly Lens (objdump -S)
+# Objdump Lens - Syntax highlight/ASM folding
 
 VS Code support for interleaved source/assembly listings produced by
 `arm-none-eabi-objdump -S -d`, GNU `.lss` files and similar `objdump -S` output.
@@ -20,18 +20,18 @@ VS Code support for interleaved source/assembly listings produced by
 
 The documentation depends on the instruction set, so each file has one:
 
-1. **Per-file choice**: status-bar item (`$(chip) arm32`) or *Disassembly Lens: Select Architecture for This File*. Stored per file; choose *Automatic* to forget it.
-2. `disasmLens.architecture.fileAssociations`: glob → instruction set, e.g. `{ "**/firmware/*.lss": "arm32" }` (shareable via `.vscode/settings.json`).
-3. `disasmLens.architecture.default`: a fixed instruction set for every file (`auto` by default).
+1. **Per-file choice**: status-bar item (`$(chip) arm32`) or *Objdump Lens: Select Architecture for This File*. Stored per file; choose *Automatic* to forget it.
+2. `objdumpLens.architecture.fileAssociations`: glob → instruction set, e.g. `{ "**/firmware/*.lss": "arm32" }` (shareable via `.vscode/settings.json`).
+3. `objdumpLens.architecture.default`: a fixed instruction set for every file (`auto` by default).
 4. **Auto-detection** from the listing's `file format` line (`elf32-littlearm` → `arm32`, `elf64-x86-64` → `amd64`, `elf32-avr` → `avr`, …).
 
-Valid ids are Compiler Explorer instruction sets (`arm32`, `aarch64`, `amd64`, `avr`, `6502`, `riscv32`, `mips`, …); the picker also accepts any custom id. CE does not have opcode documentation for every set; when it has none you get a short "no documentation" hover (`disasmLens.documentation.showNotFound`).
+Valid ids are Compiler Explorer instruction sets (`arm32`, `aarch64`, `amd64`, `avr`, `6502`, `riscv32`, `mips`, …); the picker also accepts any custom id. CE does not have opcode documentation for every set; when it has none you get a short "no documentation" hover (`objdumpLens.documentation.showNotFound`).
 
 **Caching:** every URL is requested once. Found docs are cached for 30 days and "not found" answers for 1 day, in memory *and* in VS Code's global storage, so they survive restarts. Concurrent hovers share one request; network errors / 5xx are only remembered for 60 s and never persisted. *Clear Opcode Documentation Cache* wipes it.
 
-**Privacy / offline:** only the instruction set and the mnemonic are sent (e.g. `/api/asm/arm32/ldr`), to `disasmLens.documentation.serverUrl` (default `https://godbolt.org`; point it at a self-hosted CE if you like). Set `disasmLens.documentation.enabled` to `false` to disable all network access.
+**Privacy / offline:** only the instruction set and the mnemonic are sent (e.g. `/api/asm/arm32/ldr`), to `objdumpLens.documentation.serverUrl` (default `https://godbolt.org`; point it at a self-hosted CE if you like). Set `objdumpLens.documentation.enabled` to `false` to disable all network access.
 
-## Commands (Command Palette → "Disassembly Lens")
+## Commands (Command Palette → "Objdump Lens")
 
 * **Collapse / Expand All Assembly Blocks** (also buttons in the editor title bar)
 * **Toggle All Assembly Blocks**
@@ -43,26 +43,26 @@ No default keybindings are set (AltGr layouts such as ABNT2 clash with `Ctrl+Alt
 *Keyboard Shortcuts* if you want, e.g.
 
 ```json
-{ "key": "ctrl+k ctrl+a", "command": "disasmLens.toggleAllAsm", "when": "editorLangId == disasm" }
+{ "key": "ctrl+k ctrl+a", "command": "objdumpLens.toggleAllAsm", "when": "editorLangId == disasm" }
 ```
 
 ## Settings
 
 | Setting | Default | |
 |---|---|---|
-| `disasmLens.decorations` | `true` | Tint source/asm/header lines |
-| `disasmLens.dimEncoding` | `true` | Dim address + opcode bytes |
-| `disasmLens.showAsmSummary` | `true` | Instruction count after C lines |
-| `disasmLens.autoCollapseOnOpen` | `false` | Fold every asm block on open |
-| `disasmLens.documentation.enabled` | `true` | Opcode docs on hover (network) |
-| `disasmLens.documentation.serverUrl` | `https://godbolt.org` | Compiler Explorer instance |
-| `disasmLens.documentation.showNotFound` | `true` | Hover note when CE has no docs |
-| `disasmLens.architecture.default` | `auto` | Instruction set for all files |
-| `disasmLens.architecture.fileAssociations` | `{}` | Glob → instruction set |
+| `objdumpLens.decorations` | `true` | Tint source/asm/header lines |
+| `objdumpLens.dimEncoding` | `true` | Dim address + opcode bytes |
+| `objdumpLens.showAsmSummary` | `true` | Instruction count after C lines |
+| `objdumpLens.autoCollapseOnOpen` | `false` | Fold every asm block on open |
+| `objdumpLens.documentation.enabled` | `true` | Opcode docs on hover (network) |
+| `objdumpLens.documentation.serverUrl` | `https://godbolt.org` | Compiler Explorer instance |
+| `objdumpLens.documentation.showNotFound` | `true` | Hover note when CE has no docs |
+| `objdumpLens.architecture.default` | `auto` | Instruction set for all files |
+| `objdumpLens.architecture.fileAssociations` | `{}` | Glob → instruction set |
 
 Colours are theme colours and can be overridden in `workbench.colorCustomizations`:
-`disasmLens.asmBackground`, `disasmLens.asmBorder`, `disasmLens.sourceBackground`,
-`disasmLens.sourceBorder`, `disasmLens.functionBackground`, `disasmLens.summaryForeground`.
+`objdumpLens.asmBackground`, `objdumpLens.asmBorder`, `objdumpLens.sourceBackground`,
+`objdumpLens.sourceBorder`, `objdumpLens.functionBackground`, `objdumpLens.summaryForeground`.
 
 ## Using it
 

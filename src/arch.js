@@ -69,8 +69,8 @@ const isAuto = (s) => !normalizeArch(s) || normalizeArch(s) === 'auto';
 /**
  * Precedence (highest first):
  *   1. per-file choice made with "Select Architecture for This File"
- *   2. disasmLens.architecture.fileAssociations (glob -> arch)
- *   3. disasmLens.architecture.default (unless "auto")
+ *   2. objdumpLens.architecture.fileAssociations (glob -> arch)
+ *   3. objdumpLens.architecture.default (unless "auto")
  *   4. auto-detection from the listing's "file format" line
  *
  * @returns {{arch: string|null, source: 'file'|'glob'|'setting'|'detected'|null, detail?: string}}

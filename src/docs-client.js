@@ -99,7 +99,7 @@ class DocsClient {
     this.stats.requests++;
     let entry;
     try {
-      const res = await this.request(url, { headers: { Accept: 'application/json', 'User-Agent': 'vscode-disasm-lens' }, timeoutMs: this.timeoutMs });
+      const res = await this.request(url, { headers: { Accept: 'application/json', 'User-Agent': 'vscode-objdump-lens' }, timeoutMs: this.timeoutMs });
       if (res.status === 200) {
         entry = { t: this.now(), kind: 'hit', data: this._parseBody(res.body) };
       } else if (res.status === 404) {

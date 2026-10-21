@@ -107,18 +107,18 @@ const ctx = {
     assert.ok(loc && loc.pos.line >= 0, 'definition should resolve <main+0x..>');
   }
   // commands
-  await commands['disasmLens.collapseAllAsm']();
+  await commands['objdumpLens.collapseAllAsm']();
   const c1 = calls.find((c) => c[0] === 'editor.fold');
   assert.ok(c1 && c1[1].selectionLines.length === 54, 'collapse should target every anchored asm block');
-  await commands['disasmLens.expandAllAsm']();
+  await commands['objdumpLens.expandAllAsm']();
   assert.ok(calls.some((c) => c[0] === 'editor.unfold'));
-  await commands['disasmLens.toggleAllAsm'](); await commands['disasmLens.toggleAllAsm']();
+  await commands['objdumpLens.toggleAllAsm'](); await commands['objdumpLens.toggleAllAsm']();
   const mainLine = lines.findIndex((l) => /^[0-9a-f]+ <main>:/.test(l));
   editor.selection.active.line = mainLine + 10;
   calls.length = 0;
-  await commands['disasmLens.collapseFunctionAsm']();
+  await commands['objdumpLens.collapseFunctionAsm']();
   assert.ok(calls[0][1].selectionLines.length > 5);
-  await commands['disasmLens.toggleAsmAtCursor']();
+  await commands['objdumpLens.toggleAsmAtCursor']();
   assert.ok(calls.some((c) => c[0] === 'editor.toggleFold'));
 
   // ---- opcode documentation hover + architecture -------------------------------------------
@@ -143,17 +143,17 @@ const ctx = {
   assert.strictEqual(hoverReqs.length, n);
 
   // per-file architecture choice wins over detection and is persisted
-  await commands['disasmLens.selectArchitecture']();
+  await commands['objdumpLens.selectArchitecture']();
   assert.strictEqual(statusItem.text, '$(chip) aarch64');
-  assert.deepStrictEqual(Object.values(gstate['disasmLens.archByFile.v1']), ['aarch64']);
+  assert.deepStrictEqual(Object.values(gstate['objdumpLens.archByFile.v1']), ['aarch64']);
   h = await providers.hover.provideHover(doc, new Position(pushLine, col), tok);
   assert.ok(h.contents.value.includes('`aarch64`') || h.contents.value.includes('No Compiler Explorer documentation'));
   // "Automatic" clears the per-file choice again
   quickPickAnswer.arch = 'auto';
-  await commands['disasmLens.selectArchitecture']();
+  await commands['objdumpLens.selectArchitecture']();
   assert.strictEqual(statusItem.text, '$(chip) arm32');
-  assert.deepStrictEqual(gstate['disasmLens.archByFile.v1'], {});
-  await commands['disasmLens.clearDocCache']();
+  assert.deepStrictEqual(gstate['objdumpLens.archByFile.v1'], {});
+  await commands['objdumpLens.clearDocCache']();
   await ext.deactivate();
   fake.close();
   console.log('extension smoke test OK');

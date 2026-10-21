@@ -25,7 +25,7 @@ function getModel(doc) {
   return model;
 }
 
-const cfg = () => vscode.workspace.getConfiguration('disasmLens');
+const cfg = () => vscode.workspace.getConfiguration('objdumpLens');
 
 // ---------------------------------------------------------------------------
 // Decorations (theme-aware colours are contributed in package.json "colors")
@@ -41,18 +41,18 @@ function createDecorationTypes() {
     borderColor: color(border),
   });
   return {
-    asm: vscode.window.createTextEditorDecorationType(bar('disasmLens.asmBackground', 'disasmLens.asmBorder')),
-    source: vscode.window.createTextEditorDecorationType(bar('disasmLens.sourceBackground', 'disasmLens.sourceBorder')),
+    asm: vscode.window.createTextEditorDecorationType(bar('objdumpLens.asmBackground', 'objdumpLens.asmBorder')),
+    source: vscode.window.createTextEditorDecorationType(bar('objdumpLens.sourceBackground', 'objdumpLens.sourceBorder')),
     header: vscode.window.createTextEditorDecorationType({
       isWholeLine: true,
-      backgroundColor: color('disasmLens.functionBackground'),
+      backgroundColor: color('objdumpLens.functionBackground'),
       fontWeight: 'bold',
-      overviewRulerColor: color('disasmLens.functionBackground'),
+      overviewRulerColor: color('objdumpLens.functionBackground'),
       overviewRulerLane: vscode.OverviewRulerLane.Left,
     }),
     dim: vscode.window.createTextEditorDecorationType({ opacity: '0.55' }),
     summary: vscode.window.createTextEditorDecorationType({
-      after: { color: color('disasmLens.summaryForeground'), fontStyle: 'italic', margin: '0 0 0 2em' },
+      after: { color: color('objdumpLens.summaryForeground'), fontStyle: 'italic', margin: '0 0 0 2em' },
     }),
   };
 }
@@ -107,7 +107,7 @@ async function setFold(lines, fold) {
 function activeDisasmEditor() {
   const ed = vscode.window.activeTextEditor;
   if (!ed || ed.document.languageId !== LANG) {
-    vscode.window.showInformationMessage('Disassembly Lens: open a disassembly file (language mode "Disassembly (objdump -S)").');
+    vscode.window.showInformationMessage('Objdump Lens: open a disassembly file (language mode "Disassembly (objdump -S)").');
     return undefined;
   }
   return ed;
@@ -127,8 +127,8 @@ function currentFunctionIndex(model, line) {
 // Architecture (Compiler Explorer instruction set) per file
 // ---------------------------------------------------------------------------
 
-const ARCH_BY_FILE_KEY = 'disasmLens.archByFile.v1';
-const DOC_CACHE_KEY = 'disasmLens.docCache.v1';
+const ARCH_BY_FILE_KEY = 'objdumpLens.archByFile.v1';
+const DOC_CACHE_KEY = 'objdumpLens.docCache.v1';
 let extContext;
 let docsClient;
 
@@ -152,8 +152,8 @@ function getArchInfo(doc) {
 
 const SOURCE_LABEL = {
   file: 'chosen for this file',
-  glob: 'from disasmLens.architecture.fileAssociations',
-  setting: 'from disasmLens.architecture.default',
+  glob: 'from objdumpLens.architecture.fileAssociations',
+  setting: 'from objdumpLens.architecture.default',
   detected: 'auto-detected from the listing',
 };
 
@@ -174,7 +174,7 @@ function updateStatusBar(item) {
 async function selectArchitecture() {
   const ed = vscode.window.activeTextEditor;
   if (!ed || ed.document.languageId !== LANG) {
-    vscode.window.showInformationMessage('Disassembly Lens: open a disassembly file first.');
+    vscode.window.showInformationMessage('Objdump Lens: open a disassembly file first.');
     return;
   }
   const key = ed.document.uri.toString();
@@ -183,7 +183,7 @@ async function selectArchitecture() {
     {
       label: '$(sync) Automatic',
       description: 'forget the choice for this file',
-      detail: 'Uses disasmLens.architecture.fileAssociations / default, else detects it from the "file format" line',
+      detail: 'Uses objdumpLens.architecture.fileAssociations / default, else detects it from the "file format" line',
       arch: 'auto',
     },
     { label: 'Instruction sets', kind: vscode.QuickPickItemKind.Separator },
@@ -237,7 +237,7 @@ function activate(context) {
   });
 
   const statusItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 90);
-  statusItem.command = 'disasmLens.selectArchitecture';
+  statusItem.command = 'objdumpLens.selectArchitecture';
   context.subscriptions.push(statusItem);
   const refreshStatus = () => updateStatusBar(statusItem);
 
@@ -254,9 +254,9 @@ function activate(context) {
         if (!info.arch) {
           const md = new vscode.MarkdownString(
             'Pick an instruction set to see documentation for `' + mn.mnemonic + '`: ' +
-            '[Select architecture…](command:disasmLens.selectArchitecture)'
+            '[Select architecture…](command:objdumpLens.selectArchitecture)'
           );
-          md.isTrusted = { enabledCommands: ['disasmLens.selectArchitecture'] };
+          md.isTrusted = { enabledCommands: ['objdumpLens.selectArchitecture'] };
           return new vscode.Hover(md, range);
         }
 
@@ -285,14 +285,14 @@ function activate(context) {
     }),
     vscode.window.onDidChangeActiveTextEditor(refreshStatus),
     vscode.workspace.onDidChangeTextDocument((e) => { if (e.document === (vscode.window.activeTextEditor || {}).document) refreshStatus(); }),
-    vscode.workspace.onDidChangeConfiguration((e) => { if (e.affectsConfiguration('disasmLens')) refreshStatus(); }),
-    vscode.commands.registerCommand('disasmLens.selectArchitecture', async () => {
+    vscode.workspace.onDidChangeConfiguration((e) => { if (e.affectsConfiguration('objdumpLens')) refreshStatus(); }),
+    vscode.commands.registerCommand('objdumpLens.selectArchitecture', async () => {
       await selectArchitecture();
       refreshStatus();
     }),
-    vscode.commands.registerCommand('disasmLens.clearDocCache', async () => {
+    vscode.commands.registerCommand('objdumpLens.clearDocCache', async () => {
       await docsClient.clear();
-      vscode.window.showInformationMessage('Disassembly Lens: opcode documentation cache cleared.');
+      vscode.window.showInformationMessage('Objdump Lens: opcode documentation cache cleared.');
     })
   );
   refreshStatus();
@@ -391,7 +391,7 @@ function activate(context) {
       autoCollapsed.delete(key);
     }),
     vscode.workspace.onDidChangeConfiguration((e) => {
-      if (e.affectsConfiguration('disasmLens')) refreshAll();
+      if (e.affectsConfiguration('objdumpLens')) refreshAll();
     }),
     { dispose: () => clearTimeout(timer) }
   );
@@ -401,21 +401,21 @@ function activate(context) {
   // --- commands --------------------------------------------------------------
   const reg = (id, fn) => context.subscriptions.push(vscode.commands.registerCommand(id, fn));
 
-  reg('disasmLens.collapseAllAsm', async () => {
+  reg('objdumpLens.collapseAllAsm', async () => {
     const ed = activeDisasmEditor();
     if (!ed) return;
     await setFold(foldableRuns(getModel(ed.document)).map((r) => r.start), true);
     allCollapsed.add(ed.document.uri.toString());
   });
 
-  reg('disasmLens.expandAllAsm', async () => {
+  reg('objdumpLens.expandAllAsm', async () => {
     const ed = activeDisasmEditor();
     if (!ed) return;
     await setFold(foldableRuns(getModel(ed.document)).map((r) => r.start), false);
     allCollapsed.delete(ed.document.uri.toString());
   });
 
-  reg('disasmLens.toggleAllAsm', async () => {
+  reg('objdumpLens.toggleAllAsm', async () => {
     const ed = activeDisasmEditor();
     if (!ed) return;
     const key = ed.document.uri.toString();
@@ -429,7 +429,7 @@ function activate(context) {
     }
   });
 
-  reg('disasmLens.toggleAsmAtCursor', async () => {
+  reg('objdumpLens.toggleAsmAtCursor', async () => {
     const ed = activeDisasmEditor();
     if (!ed) return;
     const line = ed.selection.active.line;
@@ -443,7 +443,7 @@ function activate(context) {
       run = runs.find((r) => r.first > line && r.fn === fi);
     }
     if (!run) {
-      vscode.window.showInformationMessage('Disassembly Lens: no assembly block at the cursor.');
+      vscode.window.showInformationMessage('Objdump Lens: no assembly block at the cursor.');
       return;
     }
     await vscode.commands.executeCommand('editor.toggleFold', { selectionLines: [run.start], levels: 1, direction: 'down' });
@@ -455,15 +455,15 @@ function activate(context) {
     const model = getModel(ed.document);
     const fi = currentFunctionIndex(model, ed.selection.active.line);
     if (fi < 0) {
-      vscode.window.showInformationMessage('Disassembly Lens: the cursor is not inside a function.');
+      vscode.window.showInformationMessage('Objdump Lens: the cursor is not inside a function.');
       return;
     }
     const fn = model.functions[fi];
     const lines = foldableRuns(model).filter((r) => r.start >= fn.line && r.last <= fn.end).map((r) => r.start);
     await setFold(lines, fold);
   };
-  reg('disasmLens.collapseFunctionAsm', functionCommand(true));
-  reg('disasmLens.expandFunctionAsm', functionCommand(false));
+  reg('objdumpLens.collapseFunctionAsm', functionCommand(true));
+  reg('objdumpLens.expandFunctionAsm', functionCommand(false));
 }
 
 function deactivate() {

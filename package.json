@@ -1,8 +1,8 @@
 {
-  "name": "disasm-lens",
-  "displayName": "Disassembly Lens (objdump -S)",
+  "name": "objdump-lens",
+  "displayName": "Objdump Lens - Syntax highlight/ASM folding",
   "description": "Syntax highlighting, C/C++ vs asm separation, per-source-line asm folding and Compiler Explorer opcode tooltips for objdump -S / .lss listings.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "publisher": "local",
   "icon": "images/icon.png",
   "galleryBanner": {
@@ -62,162 +62,162 @@
     ],
     "commands": [
       {
-        "command": "disasmLens.collapseAllAsm",
+        "command": "objdumpLens.collapseAllAsm",
         "title": "Collapse All Assembly Blocks",
-        "category": "Disassembly Lens",
+        "category": "Objdump Lens",
         "icon": "$(fold)"
       },
       {
-        "command": "disasmLens.expandAllAsm",
+        "command": "objdumpLens.expandAllAsm",
         "title": "Expand All Assembly Blocks",
-        "category": "Disassembly Lens",
+        "category": "Objdump Lens",
         "icon": "$(unfold)"
       },
       {
-        "command": "disasmLens.toggleAllAsm",
+        "command": "objdumpLens.toggleAllAsm",
         "title": "Toggle All Assembly Blocks",
-        "category": "Disassembly Lens"
+        "category": "Objdump Lens"
       },
       {
-        "command": "disasmLens.toggleAsmAtCursor",
+        "command": "objdumpLens.toggleAsmAtCursor",
         "title": "Toggle Assembly Block at Cursor",
-        "category": "Disassembly Lens"
+        "category": "Objdump Lens"
       },
       {
-        "command": "disasmLens.collapseFunctionAsm",
+        "command": "objdumpLens.collapseFunctionAsm",
         "title": "Collapse Assembly Blocks in Current Function",
-        "category": "Disassembly Lens"
+        "category": "Objdump Lens"
       },
       {
-        "command": "disasmLens.expandFunctionAsm",
+        "command": "objdumpLens.expandFunctionAsm",
         "title": "Expand Assembly Blocks in Current Function",
-        "category": "Disassembly Lens"
+        "category": "Objdump Lens"
       },
       {
-        "command": "disasmLens.selectArchitecture",
+        "command": "objdumpLens.selectArchitecture",
         "title": "Select Architecture for This File (opcode docs)",
-        "category": "Disassembly Lens"
+        "category": "Objdump Lens"
       },
       {
-        "command": "disasmLens.clearDocCache",
+        "command": "objdumpLens.clearDocCache",
         "title": "Clear Opcode Documentation Cache",
-        "category": "Disassembly Lens"
+        "category": "Objdump Lens"
       }
     ],
     "menus": {
       "editor/title": [
         {
-          "command": "disasmLens.collapseAllAsm",
+          "command": "objdumpLens.collapseAllAsm",
           "when": "resourceLangId == disasm",
           "group": "navigation@1"
         },
         {
-          "command": "disasmLens.expandAllAsm",
+          "command": "objdumpLens.expandAllAsm",
           "when": "resourceLangId == disasm",
           "group": "navigation@2"
         }
       ],
       "editor/context": [
         {
-          "command": "disasmLens.toggleAsmAtCursor",
+          "command": "objdumpLens.toggleAsmAtCursor",
           "when": "editorLangId == disasm",
-          "group": "disasmLens@1"
+          "group": "objdumpLens@1"
         },
         {
-          "command": "disasmLens.collapseFunctionAsm",
+          "command": "objdumpLens.collapseFunctionAsm",
           "when": "editorLangId == disasm",
-          "group": "disasmLens@2"
+          "group": "objdumpLens@2"
         },
         {
-          "command": "disasmLens.expandFunctionAsm",
+          "command": "objdumpLens.expandFunctionAsm",
           "when": "editorLangId == disasm",
-          "group": "disasmLens@3"
+          "group": "objdumpLens@3"
         },
         {
-          "command": "disasmLens.selectArchitecture",
+          "command": "objdumpLens.selectArchitecture",
           "when": "editorLangId == disasm",
-          "group": "disasmLens@4"
+          "group": "objdumpLens@4"
         }
       ],
       "commandPalette": [
         {
-          "command": "disasmLens.collapseAllAsm",
+          "command": "objdumpLens.collapseAllAsm",
           "when": "editorLangId == disasm"
         },
         {
-          "command": "disasmLens.expandAllAsm",
+          "command": "objdumpLens.expandAllAsm",
           "when": "editorLangId == disasm"
         },
         {
-          "command": "disasmLens.toggleAllAsm",
+          "command": "objdumpLens.toggleAllAsm",
           "when": "editorLangId == disasm"
         },
         {
-          "command": "disasmLens.toggleAsmAtCursor",
+          "command": "objdumpLens.toggleAsmAtCursor",
           "when": "editorLangId == disasm"
         },
         {
-          "command": "disasmLens.collapseFunctionAsm",
+          "command": "objdumpLens.collapseFunctionAsm",
           "when": "editorLangId == disasm"
         },
         {
-          "command": "disasmLens.expandFunctionAsm",
+          "command": "objdumpLens.expandFunctionAsm",
           "when": "editorLangId == disasm"
         },
         {
-          "command": "disasmLens.selectArchitecture",
+          "command": "objdumpLens.selectArchitecture",
           "when": "editorLangId == disasm"
         },
         {
-          "command": "disasmLens.clearDocCache"
+          "command": "objdumpLens.clearDocCache"
         }
       ]
     },
     "configuration": {
-      "title": "Disassembly Lens",
+      "title": "Objdump Lens",
       "properties": {
-        "disasmLens.decorations": {
+        "objdumpLens.decorations": {
           "type": "boolean",
           "default": true,
           "description": "Tint C/C++ source lines, assembly lines and function headers so they are easy to tell apart."
         },
-        "disasmLens.dimEncoding": {
+        "objdumpLens.dimEncoding": {
           "type": "boolean",
           "default": true,
           "description": "Dim the address and raw opcode bytes of assembly lines so the mnemonic and operands stand out."
         },
-        "disasmLens.showAsmSummary": {
+        "objdumpLens.showAsmSummary": {
           "type": "boolean",
           "default": true,
           "description": "Show an instruction count at the end of each C/C++ line that owns an assembly block."
         },
-        "disasmLens.autoCollapseOnOpen": {
+        "objdumpLens.autoCollapseOnOpen": {
           "type": "boolean",
           "default": false,
           "description": "Collapse every assembly block when a disassembly file is opened."
         },
-        "disasmLens.documentation.enabled": {
+        "objdumpLens.documentation.enabled": {
           "type": "boolean",
           "default": true,
           "description": "Show opcode documentation from Compiler Explorer when hovering over a mnemonic. Only the instruction set and the opcode are sent to the server."
         },
-        "disasmLens.documentation.serverUrl": {
+        "objdumpLens.documentation.serverUrl": {
           "type": "string",
           "default": "https://godbolt.org",
           "description": "Base URL of the Compiler Explorer instance used for GET /api/asm/<instructionSet>/<opcode> (point it at a self-hosted instance if you prefer).",
           "scope": "machine-overridable"
         },
-        "disasmLens.documentation.showNotFound": {
+        "objdumpLens.documentation.showNotFound": {
           "type": "boolean",
           "default": true,
           "description": "Show a short hover message when Compiler Explorer has no documentation for the opcode."
         },
-        "disasmLens.architecture.default": {
+        "objdumpLens.architecture.default": {
           "type": "string",
           "default": "auto",
           "description": "Instruction set (Compiler Explorer id, e.g. arm32, aarch64, amd64, avr, riscv32) used for opcode docs. \"auto\" detects it from the listing's 'file format' line (e.g. elf32-littlearm -> arm32). A choice made with 'Select Architecture for This File' takes precedence."
         },
-        "disasmLens.architecture.fileAssociations": {
+        "objdumpLens.architecture.fileAssociations": {
           "type": "object",
           "default": {},
           "additionalProperties": {
@@ -229,8 +229,8 @@
     },
     "colors": [
       {
-        "id": "disasmLens.asmBackground",
-        "description": "Background of assembly lines in Disassembly Lens.",
+        "id": "objdumpLens.asmBackground",
+        "description": "Background of assembly lines in Objdump Lens.",
         "defaults": {
           "dark": "#4d9cff12",
           "light": "#0b5fff0c",
@@ -239,8 +239,8 @@
         }
       },
       {
-        "id": "disasmLens.asmBorder",
-        "description": "Left marker of assembly lines in Disassembly Lens.",
+        "id": "objdumpLens.asmBorder",
+        "description": "Left marker of assembly lines in Objdump Lens.",
         "defaults": {
           "dark": "#4d9cff80",
           "light": "#0b5fff70",
@@ -249,8 +249,8 @@
         }
       },
       {
-        "id": "disasmLens.sourceBackground",
-        "description": "Background of C/C++ source lines in Disassembly Lens.",
+        "id": "objdumpLens.sourceBackground",
+        "description": "Background of C/C++ source lines in Objdump Lens.",
         "defaults": {
           "dark": "#3fb9501c",
           "light": "#1a7f3714",
@@ -259,8 +259,8 @@
         }
       },
       {
-        "id": "disasmLens.sourceBorder",
-        "description": "Left marker of C/C++ source lines in Disassembly Lens.",
+        "id": "objdumpLens.sourceBorder",
+        "description": "Left marker of C/C++ source lines in Objdump Lens.",
         "defaults": {
           "dark": "#3fb950a0",
           "light": "#1a7f37a0",
@@ -269,8 +269,8 @@
         }
       },
       {
-        "id": "disasmLens.functionBackground",
-        "description": "Background of function header lines in Disassembly Lens.",
+        "id": "objdumpLens.functionBackground",
+        "description": "Background of function header lines in Objdump Lens.",
         "defaults": {
           "dark": "#d29a2a38",
           "light": "#bf870038",
@@ -279,7 +279,7 @@
         }
       },
       {
-        "id": "disasmLens.summaryForeground",
+        "id": "objdumpLens.summaryForeground",
         "description": "Color of the instruction count shown after C/C++ lines.",
         "defaults": {
           "dark": "editorCodeLens.foreground",
