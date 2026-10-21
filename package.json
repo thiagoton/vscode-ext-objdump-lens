@@ -1,6 +1,6 @@
 {
   "name": "objdump-lens",
-  "displayName": "Objdump Lens - Syntax highlight/ASM folding",
+  "displayName": "ObjDump Lens - Syntax highlight/ASM folding",
   "description": "Syntax highlighting, C/C++ vs asm separation, per-source-line asm folding and Compiler Explorer opcode tooltips for objdump -S / .lss listings.",
   "version": "0.3.0",
   "publisher": "thiagoton",
@@ -64,44 +64,44 @@
       {
         "command": "objdumpLens.collapseAllAsm",
         "title": "Collapse All Assembly Blocks",
-        "category": "Objdump Lens",
+        "category": "ObjDump Lens",
         "icon": "$(fold)"
       },
       {
         "command": "objdumpLens.expandAllAsm",
         "title": "Expand All Assembly Blocks",
-        "category": "Objdump Lens",
+        "category": "ObjDump Lens",
         "icon": "$(unfold)"
       },
       {
         "command": "objdumpLens.toggleAllAsm",
         "title": "Toggle All Assembly Blocks",
-        "category": "Objdump Lens"
+        "category": "ObjDump Lens"
       },
       {
         "command": "objdumpLens.toggleAsmAtCursor",
         "title": "Toggle Assembly Block at Cursor",
-        "category": "Objdump Lens"
+        "category": "ObjDump Lens"
       },
       {
         "command": "objdumpLens.collapseFunctionAsm",
         "title": "Collapse Assembly Blocks in Current Function",
-        "category": "Objdump Lens"
+        "category": "ObjDump Lens"
       },
       {
         "command": "objdumpLens.expandFunctionAsm",
         "title": "Expand Assembly Blocks in Current Function",
-        "category": "Objdump Lens"
+        "category": "ObjDump Lens"
       },
       {
         "command": "objdumpLens.selectArchitecture",
         "title": "Select Architecture for This File (opcode docs)",
-        "category": "Objdump Lens"
+        "category": "ObjDump Lens"
       },
       {
         "command": "objdumpLens.clearDocCache",
         "title": "Clear Opcode Documentation Cache",
-        "category": "Objdump Lens"
+        "category": "ObjDump Lens"
       }
     ],
     "menus": {
@@ -174,7 +174,7 @@
       ]
     },
     "configuration": {
-      "title": "Objdump Lens",
+      "title": "ObjDump Lens",
       "properties": {
         "objdumpLens.decorations": {
           "type": "boolean",
@@ -230,7 +230,7 @@
     "colors": [
       {
         "id": "objdumpLens.asmBackground",
-        "description": "Background of assembly lines in Objdump Lens.",
+        "description": "Background of assembly lines in ObjDump Lens.",
         "defaults": {
           "dark": "#4d9cff12",
           "light": "#0b5fff0c",
@@ -240,7 +240,7 @@
       },
       {
         "id": "objdumpLens.asmBorder",
-        "description": "Left marker of assembly lines in Objdump Lens.",
+        "description": "Left marker of assembly lines in ObjDump Lens.",
         "defaults": {
           "dark": "#4d9cff80",
           "light": "#0b5fff70",
@@ -250,7 +250,7 @@
       },
       {
         "id": "objdumpLens.sourceBackground",
-        "description": "Background of C/C++ source lines in Objdump Lens.",
+        "description": "Background of C/C++ source lines in ObjDump Lens.",
         "defaults": {
           "dark": "#3fb9501c",
           "light": "#1a7f3714",
@@ -260,7 +260,7 @@
       },
       {
         "id": "objdumpLens.sourceBorder",
-        "description": "Left marker of C/C++ source lines in Objdump Lens.",
+        "description": "Left marker of C/C++ source lines in ObjDump Lens.",
         "defaults": {
           "dark": "#3fb950a0",
           "light": "#1a7f37a0",
@@ -270,7 +270,7 @@
       },
       {
         "id": "objdumpLens.functionBackground",
-        "description": "Background of function header lines in Objdump Lens.",
+        "description": "Background of function header lines in ObjDump Lens.",
         "defaults": {
           "dark": "#d29a2a38",
           "light": "#bf870038",

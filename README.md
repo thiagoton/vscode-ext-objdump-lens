@@ -1,4 +1,4 @@
-# Objdump Lens - Syntax highlight/ASM folding
+# ObjDump Lens - Syntax highlight/ASM folding
 
 VS Code support for interleaved source/assembly listings produced by
 `arm-none-eabi-objdump -S -d`, GNU `.lss` files and similar `objdump -S` output.
@@ -20,7 +20,7 @@ VS Code support for interleaved source/assembly listings produced by
 
 The documentation depends on the instruction set, so each file has one:
 
-1. **Per-file choice**: status-bar item (`$(chip) arm32`) or *Objdump Lens: Select Architecture for This File*. Stored per file; choose *Automatic* to forget it.
+1. **Per-file choice**: status-bar item (`$(chip) arm32`) or *ObjDump Lens: Select Architecture for This File*. Stored per file; choose *Automatic* to forget it.
 2. `objdumpLens.architecture.fileAssociations`: glob → instruction set, e.g. `{ "**/firmware/*.lss": "arm32" }` (shareable via `.vscode/settings.json`).
 3. `objdumpLens.architecture.default`: a fixed instruction set for every file (`auto` by default).
 4. **Auto-detection** from the listing's `file format` line (`elf32-littlearm` → `arm32`, `elf64-x86-64` → `amd64`, `elf32-avr` → `avr`, …).
@@ -31,7 +31,7 @@ Valid ids are Compiler Explorer instruction sets (`arm32`, `aarch64`, `amd64`, `
 
 **Privacy / offline:** only the instruction set and the mnemonic are sent (e.g. `/api/asm/arm32/ldr`), to `objdumpLens.documentation.serverUrl` (default `https://godbolt.org`; point it at a self-hosted CE if you like). Set `objdumpLens.documentation.enabled` to `false` to disable all network access.
 
-## Commands (Command Palette → "Objdump Lens")
+## Commands (Command Palette → "ObjDump Lens")
 
 * **Collapse / Expand All Assembly Blocks** (also buttons in the editor title bar)
 * **Toggle All Assembly Blocks**

@@ -107,7 +107,7 @@ async function setFold(lines, fold) {
 function activeDisasmEditor() {
   const ed = vscode.window.activeTextEditor;
   if (!ed || ed.document.languageId !== LANG) {
-    vscode.window.showInformationMessage('Objdump Lens: open a disassembly file (language mode "Disassembly (objdump -S)").');
+    vscode.window.showInformationMessage('ObjDump Lens: open a disassembly file (language mode "Disassembly (objdump -S)").');
     return undefined;
   }
   return ed;
@@ -174,7 +174,7 @@ function updateStatusBar(item) {
 async function selectArchitecture() {
   const ed = vscode.window.activeTextEditor;
   if (!ed || ed.document.languageId !== LANG) {
-    vscode.window.showInformationMessage('Objdump Lens: open a disassembly file first.');
+    vscode.window.showInformationMessage('ObjDump Lens: open a disassembly file first.');
     return;
   }
   const key = ed.document.uri.toString();
@@ -292,7 +292,7 @@ function activate(context) {
     }),
     vscode.commands.registerCommand('objdumpLens.clearDocCache', async () => {
       await docsClient.clear();
-      vscode.window.showInformationMessage('Objdump Lens: opcode documentation cache cleared.');
+      vscode.window.showInformationMessage('ObjDump Lens: opcode documentation cache cleared.');
     })
   );
   refreshStatus();
@@ -443,7 +443,7 @@ function activate(context) {
       run = runs.find((r) => r.first > line && r.fn === fi);
     }
     if (!run) {
-      vscode.window.showInformationMessage('Objdump Lens: no assembly block at the cursor.');
+      vscode.window.showInformationMessage('ObjDump Lens: no assembly block at the cursor.');
       return;
     }
     await vscode.commands.executeCommand('editor.toggleFold', { selectionLines: [run.start], levels: 1, direction: 'down' });
@@ -455,7 +455,7 @@ function activate(context) {
     const model = getModel(ed.document);
     const fi = currentFunctionIndex(model, ed.selection.active.line);
     if (fi < 0) {
-      vscode.window.showInformationMessage('Objdump Lens: the cursor is not inside a function.');
+      vscode.window.showInformationMessage('ObjDump Lens: the cursor is not inside a function.');
       return;
     }
     const fn = model.functions[fi];

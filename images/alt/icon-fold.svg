@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
-  <title>Objdump Lens (fold concept)</title>
+  <title>ObjDump Lens (fold concept)</title>
   <rect x="4" y="4" width="248" height="248" rx="56" fill="#0d1117" stroke="#30363d" stroke-width="3"/>
   <!-- source line 1 (expanded) -->
   <path d="M40 54 l10 12 l10 -12" fill="none" stroke="#2ea043" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
