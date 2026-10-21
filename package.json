@@ -1,0 +1,293 @@
+{
+  "name": "disasm-lens",
+  "displayName": "Disassembly Lens (objdump -S)",
+  "description": "Syntax highlighting, C/C++ vs asm separation, per-source-line asm folding and Compiler Explorer opcode tooltips for objdump -S / .lss listings.",
+  "version": "0.2.0",
+  "publisher": "local",
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#0d1117",
+    "theme": "dark"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "objdump",
+    "disassembly",
+    "assembly",
+    "arm",
+    "cortex-m",
+    "embedded",
+    "lss",
+    "fold"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onLanguage:disasm"
+  ],
+  "scripts": {
+    "test": "node test/parser.test.js && node test/grammar.test.js && node test/docs.test.js && node test/extension.smoke.js"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "disasm",
+        "aliases": [
+          "Disassembly (objdump -S)",
+          "disasm"
+        ],
+        "extensions": [
+          ".disasm",
+          ".dasm",
+          ".dis",
+          ".objdump",
+          ".lss"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "disasm",
+        "scopeName": "source.disasm",
+        "path": "./syntaxes/disasm.tmLanguage.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "disasmLens.collapseAllAsm",
+        "title": "Collapse All Assembly Blocks",
+        "category": "Disassembly Lens",
+        "icon": "$(fold)"
+      },
+      {
+        "command": "disasmLens.expandAllAsm",
+        "title": "Expand All Assembly Blocks",
+        "category": "Disassembly Lens",
+        "icon": "$(unfold)"
+      },
+      {
+        "command": "disasmLens.toggleAllAsm",
+        "title": "Toggle All Assembly Blocks",
+        "category": "Disassembly Lens"
+      },
+      {
+        "command": "disasmLens.toggleAsmAtCursor",
+        "title": "Toggle Assembly Block at Cursor",
+        "category": "Disassembly Lens"
+      },
+      {
+        "command": "disasmLens.collapseFunctionAsm",
+        "title": "Collapse Assembly Blocks in Current Function",
+        "category": "Disassembly Lens"
+      },
+      {
+        "command": "disasmLens.expandFunctionAsm",
+        "title": "Expand Assembly Blocks in Current Function",
+        "category": "Disassembly Lens"
+      },
+      {
+        "command": "disasmLens.selectArchitecture",
+        "title": "Select Architecture for This File (opcode docs)",
+        "category": "Disassembly Lens"
+      },
+      {
+        "command": "disasmLens.clearDocCache",
+        "title": "Clear Opcode Documentation Cache",
+        "category": "Disassembly Lens"
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "disasmLens.collapseAllAsm",
+          "when": "resourceLangId == disasm",
+          "group": "navigation@1"
+        },
+        {
+          "command": "disasmLens.expandAllAsm",
+          "when": "resourceLangId == disasm",
+          "group": "navigation@2"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "disasmLens.toggleAsmAtCursor",
+          "when": "editorLangId == disasm",
+          "group": "disasmLens@1"
+        },
+        {
+          "command": "disasmLens.collapseFunctionAsm",
+          "when": "editorLangId == disasm",
+          "group": "disasmLens@2"
+        },
+        {
+          "command": "disasmLens.expandFunctionAsm",
+          "when": "editorLangId == disasm",
+          "group": "disasmLens@3"
+        },
+        {
+          "command": "disasmLens.selectArchitecture",
+          "when": "editorLangId == disasm",
+          "group": "disasmLens@4"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "disasmLens.collapseAllAsm",
+          "when": "editorLangId == disasm"
+        },
+        {
+          "command": "disasmLens.expandAllAsm",
+          "when": "editorLangId == disasm"
+        },
+        {
+          "command": "disasmLens.toggleAllAsm",
+          "when": "editorLangId == disasm"
+        },
+        {
+          "command": "disasmLens.toggleAsmAtCursor",
+          "when": "editorLangId == disasm"
+        },
+        {
+          "command": "disasmLens.collapseFunctionAsm",
+          "when": "editorLangId == disasm"
+        },
+        {
+          "command": "disasmLens.expandFunctionAsm",
+          "when": "editorLangId == disasm"
+        },
+        {
+          "command": "disasmLens.selectArchitecture",
+          "when": "editorLangId == disasm"
+        },
+        {
+          "command": "disasmLens.clearDocCache"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Disassembly Lens",
+      "properties": {
+        "disasmLens.decorations": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tint C/C++ source lines, assembly lines and function headers so they are easy to tell apart."
+        },
+        "disasmLens.dimEncoding": {
+          "type": "boolean",
+          "default": true,
+          "description": "Dim the address and raw opcode bytes of assembly lines so the mnemonic and operands stand out."
+        },
+        "disasmLens.showAsmSummary": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show an instruction count at the end of each C/C++ line that owns an assembly block."
+        },
+        "disasmLens.autoCollapseOnOpen": {
+          "type": "boolean",
+          "default": false,
+          "description": "Collapse every assembly block when a disassembly file is opened."
+        },
+        "disasmLens.documentation.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show opcode documentation from Compiler Explorer when hovering over a mnemonic. Only the instruction set and the opcode are sent to the server."
+        },
+        "disasmLens.documentation.serverUrl": {
+          "type": "string",
+          "default": "https://godbolt.org",
+          "description": "Base URL of the Compiler Explorer instance used for GET /api/asm/<instructionSet>/<opcode> (point it at a self-hosted instance if you prefer).",
+          "scope": "machine-overridable"
+        },
+        "disasmLens.documentation.showNotFound": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a short hover message when Compiler Explorer has no documentation for the opcode."
+        },
+        "disasmLens.architecture.default": {
+          "type": "string",
+          "default": "auto",
+          "description": "Instruction set (Compiler Explorer id, e.g. arm32, aarch64, amd64, avr, riscv32) used for opcode docs. \"auto\" detects it from the listing's 'file format' line (e.g. elf32-littlearm -> arm32). A choice made with 'Select Architecture for This File' takes precedence."
+        },
+        "disasmLens.architecture.fileAssociations": {
+          "type": "object",
+          "default": {},
+          "additionalProperties": {
+            "type": "string"
+          },
+          "markdownDescription": "Map of glob pattern to instruction set, e.g. `{ \"**/firmware/*.lss\": \"arm32\", \"**/host/*.disasm\": \"amd64\" }`. Patterns are matched against the full file path, so start them with `**/`."
+        }
+      }
+    },
+    "colors": [
+      {
+        "id": "disasmLens.asmBackground",
+        "description": "Background of assembly lines in Disassembly Lens.",
+        "defaults": {
+          "dark": "#4d9cff12",
+          "light": "#0b5fff0c",
+          "highContrast": "#00000000",
+          "highContrastLight": "#00000000"
+        }
+      },
+      {
+        "id": "disasmLens.asmBorder",
+        "description": "Left marker of assembly lines in Disassembly Lens.",
+        "defaults": {
+          "dark": "#4d9cff80",
+          "light": "#0b5fff70",
+          "highContrast": "#6fc3ff",
+          "highContrastLight": "#0b5fff"
+        }
+      },
+      {
+        "id": "disasmLens.sourceBackground",
+        "description": "Background of C/C++ source lines in Disassembly Lens.",
+        "defaults": {
+          "dark": "#3fb9501c",
+          "light": "#1a7f3714",
+          "highContrast": "#00000000",
+          "highContrastLight": "#00000000"
+        }
+      },
+      {
+        "id": "disasmLens.sourceBorder",
+        "description": "Left marker of C/C++ source lines in Disassembly Lens.",
+        "defaults": {
+          "dark": "#3fb950a0",
+          "light": "#1a7f37a0",
+          "highContrast": "#7ee787",
+          "highContrastLight": "#1a7f37"
+        }
+      },
+      {
+        "id": "disasmLens.functionBackground",
+        "description": "Background of function header lines in Disassembly Lens.",
+        "defaults": {
+          "dark": "#d29a2a38",
+          "light": "#bf870038",
+          "highContrast": "#00000000",
+          "highContrastLight": "#00000000"
+        }
+      },
+      {
+        "id": "disasmLens.summaryForeground",
+        "description": "Color of the instruction count shown after C/C++ lines.",
+        "defaults": {
+          "dark": "editorCodeLens.foreground",
+          "light": "editorCodeLens.foreground",
+          "highContrast": "editorCodeLens.foreground",
+          "highContrastLight": "editorCodeLens.foreground"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "comments": { "lineComment": "//", "blockComment": ["/*", "*/"] },
+  "brackets": [["{", "}"], ["[", "]"], ["(", ")"], ["<", ">"]],
+  "wordPattern": "(0x[0-9a-fA-F]+)|([A-Za-z_.$][\\w.$]*)|([0-9a-fA-F]+)"
+}

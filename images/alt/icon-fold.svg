@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Objdump Lens (fold concept)</title>
+  <rect x="4" y="4" width="248" height="248" rx="56" fill="#0d1117" stroke="#30363d" stroke-width="3"/>
+  <!-- source line 1 (expanded) -->
+  <path d="M40 54 l10 12 l10 -12" fill="none" stroke="#2ea043" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="76" y="52" width="136" height="20" rx="10" fill="#2ea043"/>
+  <!-- its assembly lines -->
+  <rect x="100" y="92"  width="96" height="16" rx="8" fill="#388bfd"/>
+  <rect x="100" y="120" width="72" height="16" rx="8" fill="#388bfd"/>
+  <rect x="100" y="148" width="108" height="16" rx="8" fill="#388bfd"/>
+  <!-- source line 2 (collapsed) -->
+  <path d="M46 186 l12 10 l-12 10" fill="none" stroke="#2ea043" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="76" y="186" width="96" height="20" rx="10" fill="#2ea043"/>
+  <rect x="182" y="186" width="30" height="20" rx="10" fill="#388bfd" opacity=".55"/>
+  <circle cx="190" cy="196" r="2.6" fill="#fff"/><circle cx="197" cy="196" r="2.6" fill="#fff"/><circle cx="204" cy="196" r="2.6" fill="#fff"/>
+</svg>

@@ -1,0 +1,208 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Disassembly (objdump -S)",
+  "scopeName": "source.disasm",
+  "patterns": [
+    { "include": "#file-header" },
+    { "include": "#section-header" },
+    { "include": "#function-header" },
+    { "include": "#asm-padding" },
+    { "include": "#asm-line" },
+    { "include": "#asm-line-loose" },
+    { "include": "#source-line" }
+  ],
+  "repository": {
+
+    "file-header": {
+      "match": "^(.+?):(\\s+)(file format)\\s+(\\S+)\\s*$",
+      "name": "meta.header.file.disasm",
+      "captures": {
+        "1": { "name": "string.unquoted.filename.disasm" },
+        "3": { "name": "keyword.other.file-format.disasm" },
+        "4": { "name": "support.type.file-format.disasm" }
+      }
+    },
+
+    "section-header": {
+      "match": "^(Disassembly of section)\\s+(\\S+?)(:)\\s*$",
+      "name": "meta.header.section.disasm",
+      "captures": {
+        "1": { "name": "keyword.other.section.disasm" },
+        "2": { "name": "entity.name.section.disasm" },
+        "3": { "name": "punctuation.separator.disasm" }
+      }
+    },
+
+    "function-header": {
+      "match": "^([0-9a-f]{8,16})\\s+(<)(.+?)(>)(:)\\s*$",
+      "name": "meta.function.header.disasm",
+      "captures": {
+        "1": { "name": "constant.numeric.address.disasm" },
+        "2": { "name": "punctuation.definition.symbol.begin.disasm" },
+        "3": { "name": "entity.name.function.disasm" },
+        "4": { "name": "punctuation.definition.symbol.end.disasm" },
+        "5": { "name": "punctuation.separator.disasm" }
+      }
+    },
+
+    "asm-padding": {
+      "match": "^\\t(\\.\\.\\.)\\s*$",
+      "name": "meta.asm.line.padding.disasm",
+      "captures": { "1": { "name": "comment.line.ellipsis.disasm" } }
+    },
+
+    "asm-line": {
+      "match": "^(\\s+)([0-9a-f]+)(:)\\t([0-9a-f ]*[0-9a-f])\\s*\\t(\\S+)(?:[\\t ]+(.*?))?\\s*$",
+      "name": "meta.asm.line.disasm",
+      "captures": {
+        "2": { "name": "constant.numeric.address.disasm" },
+        "3": { "name": "punctuation.separator.address.disasm" },
+        "4": { "name": "constant.numeric.encoding.disasm" },
+        "5": {
+          "patterns": [
+            { "match": "\\.\\w+", "name": "storage.modifier.directive.disasm" },
+            {
+              "match": "(?<![\\w.])(?:bl?x?j?|cbn?z|tb[bh]|b(?:l)?(?:eq|ne|cs|hs|cc|lo|mi|pl|vs|vc|hi|ls|ge|lt|gt|le)|call[a-z]?|ret[a-z]?|jmp[a-z]?|j[a-z]{1,3}|jalr?|leave)(?:\\.[nw])?(?![\\w.])",
+              "name": "keyword.control.branch.disasm"
+            },
+            {
+              "match": "(?<![\\w.])(?:push|pop|vpush|vpop)(?:\\.[nw])?(?![\\w.])",
+              "name": "keyword.control.stack.disasm"
+            },
+            {
+              "match": "(?<![\\w.])(?:ldr|str|ldm|stm|vldr|vstr|vldm|vstm)[a-z0-9]*(?:\\.[nw])?(?![\\w.])",
+              "name": "support.function.memory.disasm"
+            },
+            { "match": ".+", "name": "keyword.other.mnemonic.disasm" }
+          ]
+        },
+        "6": { "patterns": [{ "include": "#asm-operands" }] }
+      }
+    },
+
+    "asm-line-loose": {
+      "match": "^(\\s+)([0-9a-f]+)(:)(?:\\t| {2,})(.*)$",
+      "name": "meta.asm.line.disasm",
+      "captures": {
+        "2": { "name": "constant.numeric.address.disasm" },
+        "3": { "name": "punctuation.separator.address.disasm" },
+        "4": { "patterns": [{ "include": "#asm-operands" }] }
+      }
+    },
+
+    "asm-operands": {
+      "patterns": [
+        {
+          "match": "([@;]|#(?=\\s))(.*)$",
+          "name": "comment.line.asm.disasm",
+          "captures": { "2": { "patterns": [{ "include": "#symbol" }] } }
+        },
+        { "include": "#symbol" },
+        {
+          "match": "\\b(?:r(?:1[0-5]|[0-9])|sp|lr|pc|ip|sl|fp|sb|[sdq](?:[12]?[0-9]|3[01])|apsr|cpsr|spsr|primask|basepri|faultmask|control|msp|psp|ipsr|epsr|xpsr|iapsr|eapsr|iepsr|zero|ra|gp|tp|t[0-6]|s(?:1[01]|[0-9])|a[0-7])\\b|%[a-z][a-z0-9]*",
+          "name": "variable.other.register.disasm"
+        },
+        { "match": "\\b(?:lsl|lsr|asr|ror|rrx)\\b", "name": "keyword.operator.shift.disasm" },
+        {
+          "match": "[#$]-?(?:0x[0-9a-fA-F]+|\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)",
+          "name": "constant.numeric.immediate.disasm"
+        },
+        { "match": "\\b0x[0-9a-fA-F]+\\b", "name": "constant.numeric.hex.disasm" },
+        { "match": "\\b[0-9a-f]+\\b(?=\\s+<)", "name": "constant.numeric.address.disasm" },
+        { "match": "\\b\\d+\\b", "name": "constant.numeric.decimal.disasm" },
+        { "match": "[\\[\\]{}!^]", "name": "punctuation.section.disasm" },
+        { "match": ",", "name": "punctuation.separator.comma.disasm" }
+      ]
+    },
+
+    "symbol": {
+      "match": "(<)([^>\\s+]+)(?:(\\+)(0x[0-9a-f]+))?(>)",
+      "name": "meta.symbol.disasm",
+      "captures": {
+        "1": { "name": "punctuation.definition.symbol.begin.disasm" },
+        "2": { "name": "entity.name.function.disasm" },
+        "3": { "name": "keyword.operator.arithmetic.disasm" },
+        "4": { "name": "constant.numeric.hex.disasm" },
+        "5": { "name": "punctuation.definition.symbol.end.disasm" }
+      }
+    },
+
+    "source-line": {
+      "match": "^(?=\\s*\\S)(?!\\s+[0-9a-f]+:(?:\\t| {2,})|[0-9a-f]{8,16} <|\\t\\.\\.\\.\\s*$|Disassembly of section |.+:\\s+file format ).*$",
+      "name": "meta.source.line.disasm",
+      "captures": { "0": { "patterns": [{ "include": "#c" }] } }
+    },
+
+    "c": {
+      "patterns": [
+        { "match": "/\\*.*?\\*/", "name": "comment.block.c" },
+        { "match": "/\\*.*$", "name": "comment.block.c" },
+        {
+          "match": "^\\s*\\*(?:/|\\s|$).*$",
+          "name": "comment.block.documentation.c",
+          "captures": {}
+        },
+        { "match": "//.*$", "name": "comment.line.double-slash.c" },
+        {
+          "match": "^\\s*(#\\s*include)\\s*(<[^>]*>|\"[^\"]*\")",
+          "captures": {
+            "1": { "name": "keyword.control.directive.include.c" },
+            "2": { "name": "string.quoted.other.lt-gt.include.c" }
+          }
+        },
+        {
+          "match": "^\\s*(#\\s*(?:define|undef|ifdef|ifndef|if|elif|else|endif|pragma|error|warning|line))\\b",
+          "captures": { "1": { "name": "keyword.control.directive.c" } }
+        },
+        {
+          "begin": "\"",
+          "end": "\"|$",
+          "name": "string.quoted.double.c",
+          "patterns": [
+            { "match": "\\\\(?:x[0-9a-fA-F]{1,2}|[0-7]{1,3}|.)", "name": "constant.character.escape.c" },
+            {
+              "match": "%[-+ #0]*\\d*(?:\\.\\d+)?(?:hh|h|ll|l|L|z|j|t)?[diouxXeEfFgGaAcspn%]",
+              "name": "constant.other.placeholder.c"
+            }
+          ]
+        },
+        {
+          "match": "'(?:[^'\\\\]|\\\\.[^']*)'",
+          "name": "string.quoted.single.c"
+        },
+        {
+          "match": "\\b(?:0[xX][0-9a-fA-F]+|0[bB][01]+|\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?)[uUlLfF]*\\b",
+          "name": "constant.numeric.c"
+        },
+        {
+          "match": "\\b(?:if|else|for|while|do|switch|case|default|break|continue|return|goto|try|catch|throw)\\b",
+          "name": "keyword.control.c"
+        },
+        {
+          "match": "\\b(?:sizeof|alignof|new|delete|(?:static|dynamic|reinterpret|const)_cast)\\b",
+          "name": "keyword.operator.c"
+        },
+        {
+          "match": "\\b(?:static|const|volatile|extern|inline|register|restrict|typedef|constexpr|mutable|explicit|virtual|override|final)\\b",
+          "name": "storage.modifier.c"
+        },
+        {
+          "match": "\\b(?:struct|union|enum|class|namespace|template|typename|using|public|private|protected)\\b",
+          "name": "storage.type.c"
+        },
+        {
+          "match": "\\b(?:void|char|short|int|long|float|double|signed|unsigned|bool|_Bool|auto|size_t|ssize_t|ptrdiff_t|u?intptr_t|u?int(?:8|16|32|64)_t|wchar_t)\\b",
+          "name": "storage.type.built-in.c"
+        },
+        { "match": "\\b[A-Za-z_]\\w*_t\\b", "name": "storage.type.c" },
+        { "match": "\\b(?:NULL|true|false|nullptr|this)\\b", "name": "constant.language.c" },
+        { "match": "\\b[A-Z][A-Z0-9_]{2,}\\b", "name": "constant.other.macro.c" },
+        { "match": "\\b[A-Za-z_]\\w*(?=\\s*\\()", "name": "entity.name.function.c" },
+        {
+          "match": "->|\\+\\+|--|<<=?|>>=?|&&|\\|\\||[!<>=+\\-*/%&|^]=?|[~?:]",
+          "name": "keyword.operator.c"
+        }
+      ]
+    }
+  }
+}
